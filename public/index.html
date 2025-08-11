@@ -3,53 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Odyssey</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap">
+    <title>Space Adventure</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
         <div class="main-menu menu-screen">
-            <div class="title-container">
-                <h1 class="title">SPACE<span>ODYSSEY</span></h1>
-                <div class="stars"></div>
-                <div class="ship-animation"></div>
-            </div>
-            <div class="buttons">
-                <button class="btn play-btn">START MISSION</button>
-                <button class="btn about-btn">ABOUT</button>
-            </div>
+            <h1>SPACE ADVENTURE</h1>
+            <button class="btn play-btn">START</button>
         </div>
-
-        <div class="about-screen menu-screen hidden">
-            <h2>MISSION BRIEFING</h2>
-            <div class="about-content">
-                <p>Navigate your starship through asteroid pillars.</p>
-                <p>Tap screen to boost engines!</p>
-            </div>
-            <button class="btn back-btn">BACK</button>
-        </div>
-
+        
         <canvas id="gameCanvas"></canvas>
-
+        
         <div class="game-ui">
-            <div class="score-display">
-                <span class="score-icon">🚀</span>
-                <span id="score">0</span>
-            </div>
+            <div class="score-display">SCORE: <span id="score">0</span></div>
         </div>
-
+        
         <div class="game-over-screen menu-screen hidden">
-            <h2>MISSION FAILED</h2>
-            <div class="final-score">
-                SCORE: <span id="finalScore">0</span>
-            </div>
-            <div class="buttons">
-                <button class="btn restart-btn">RETRY</button>
-                <button class="btn menu-btn">MENU</button>
-            </div>
+            <h2>GAME OVER</h2>
+            <div class="final-score">SCORE: <span id="finalScore">0</span></div>
+            <button class="btn restart-btn">TRY AGAIN</button>
         </div>
     </div>
+
+    <!-- Предзагрузка изображений -->
+    <img id="preload-fon" src="fon.jpg" style="display:none">
+    <img id="preload-sam" src="sam.png" style="display:none">
 
     <script src="game.js"></script>
 </body>
