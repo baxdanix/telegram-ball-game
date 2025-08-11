@@ -1,34 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Night Bird Flight</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moonlight Bird</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-    </style>
 </head>
 <body>
-    <div id="game-container">
-        <div id="menu">
-            <h1>Night Bird Flight</h1>
-            <div class="btn" id="startBtn">Start Game</div>
-            <div class="btn" id="aboutBtn">About</div>
+    <div class="game-container">
+        <div class="main-menu menu-screen">
+            <div class="title-container">
+                <h1 class="title">Moonlight<span>Bird</span></h1>
+                <div class="moon"></div>
+                <div class="bird-animation"></div>
+            </div>
+            <div class="buttons">
+                <button class="btn play-btn">Начать игру</button>
+                <button class="btn about-btn">Об игре</button>
+            </div>
+            <div class="clouds"></div>
         </div>
-        <div id="about" class="hidden">
-            <h2>About the Game</h2>
-            <p>Guide the night bird through the city lights!</p>
-            <div class="btn" id="backBtn">Back</div>
+
+        <div class="about-screen menu-screen hidden">
+            <h2>Об игре</h2>
+            <div class="about-content">
+                <p>Помогите птичке пролететь через фонарные столбы в лунную ночь.</p>
+                <p>Нажимайте на экран, чтобы взмахнуть крыльями!</p>
+            </div>
+            <button class="btn back-btn">Назад</button>
         </div>
+
         <canvas id="gameCanvas"></canvas>
-        <div id="score">0</div>
-        <div id="gameOver" class="hidden">
-            <h2>Game Over</h2>
-            <p>Your score: <span id="finalScore">0</span></p>
-            <div class="btn" id="restartBtn">Try Again</div>
+
+        <div class="game-ui">
+            <div class="score-display">
+                <span class="score-icon">🏆</span>
+                <span id="score">0</span>
+            </div>
+        </div>
+
+        <div class="game-over-screen menu-screen hidden">
+            <h2>Игра окончена</h2>
+            <div class="final-score">
+                Ваш результат: <span id="finalScore">0</span>
+            </div>
+            <div class="buttons">
+                <button class="btn restart-btn">Играть снова</button>
+                <button class="btn menu-btn">В меню</button>
+            </div>
         </div>
     </div>
+
     <script src="game.js"></script>
 </body>
 </html>
