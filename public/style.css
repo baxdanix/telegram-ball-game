@@ -1,11 +1,10 @@
 :root {
-    --primary: #6e45e2;
-    --secondary: #88d3ce;
-    --dark: #0f0c29;
-    --darker: #0a081c;
-    --light: #f8f9fa;
-    --moon: #f5f3ce;
-    --moon-glow: rgba(245, 243, 206, 0.2);
+    --primary: #4fc3f7;
+    --secondary: #7c4dff;
+    --dark: #0b0a20;
+    --darker: #070616;
+    --light: #e0f7fa;
+    --engine: #ff9100;
 }
 
 * {
@@ -15,11 +14,12 @@
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Orbitron', sans-serif;
     overflow: hidden;
     touch-action: manipulation;
     background-color: var(--dark);
     color: var(--light);
+    letter-spacing: 1px;
 }
 
 .game-container {
@@ -29,7 +29,6 @@ body {
     overflow: hidden;
 }
 
-/* Общие стили меню */
 .menu-screen {
     position: absolute;
     top: 0;
@@ -40,17 +39,17 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+    background: radial-gradient(ellipse at center, var(--darker) 0%, var(--dark) 100%);
     z-index: 100;
     padding: 20px;
     transition: all 0.5s ease;
+    overflow: hidden;
 }
 
 .hidden {
     display: none !important;
 }
 
-/* Главное меню */
 .main-menu {
     justify-content: space-between;
     padding-bottom: 80px;
@@ -60,6 +59,7 @@ body {
     position: relative;
     text-align: center;
     margin-bottom: 40px;
+    width: 100%;
 }
 
 .title {
@@ -70,38 +70,51 @@ body {
     background-clip: text;
     color: transparent;
     margin-bottom: 20px;
-    text-shadow: 0 4px 15px rgba(110, 69, 226, 0.3);
+    text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
+    position: relative;
+    z-index: 2;
 }
 
 .title span {
     display: block;
-    font-size: 2.5rem;
+    font-size: 2rem;
+    color: var(--light);
+    background: none;
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    text-shadow: 0 0 10px rgba(124, 77, 255, 0.7);
 }
 
-.moon {
+.stars {
     position: absolute;
-    top: -50px;
-    right: -30px;
-    width: 100px;
-    height: 100px;
-    background-color: var(--moon);
-    border-radius: 50%;
-    box-shadow: 0 0 40px 10px var(--moon-glow);
-    z-index: -1;
-    animation: float 6s ease-in-out infinite;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(1px 1px at 20px 30px, white, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 40px 70px, white, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 80px 40px, white, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 120px 80px, white, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 160px 30px, white, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 200px 60px, white, rgba(0,0,0,0));
+    background-size: 200px 200px;
+    animation: starsMove 50s linear infinite;
+    z-index: 1;
 }
 
-.bird-animation {
+.ship-animation {
     position: absolute;
-    bottom: -30px;
+    bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px;
-    height: 60px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23ffffff" d="M512 256c0-37.7-23.7-69.9-57.1-82.4 14.7-32.9 8.3-70.8-19.5-98.6-27.8-27.8-65.7-34.2-98.6-19.5C325.9 23.7 293.7 0 256 0s-69.9 23.7-82.4 57.1c-32.9-14.7-70.8-8.3-98.6 19.5-27.8 27.8-34.2 65.7-19.5 98.6C23.7 186.1 0 218.3 0 256s23.7 69.9 57.1 82.4c-14.7 32.9-8.3 70.8 19.5 98.6 27.8 27.8 65.7 34.2 98.6 19.5C186.1 488.3 218.3 512 256 512s69.9-23.7 82.4-57.1c32.9 14.7 70.8 8.3 98.6-19.5 27.8-27.8 34.2-65.7 19.5-98.6C488.3 325.9 512 293.7 512 256z"/></svg>');
+    width: 60px;
+    height: 80px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%234fc3f7" d="M511.6 36.86l-144 384c-4.19 11.2-16.01 17.7-27.2 13.5-5.47-2.05-9.6-6.33-11.2-11.68L304 288H192l-25.2 134.7c-1.6 5.3-5.8 9.6-11.2 11.7-11.2 4.2-23.0-2.3-27.2-13.5l-144-384c-3.95-10.53.21-22.45 10.19-27.01 5.06-2.3 10.86-2.4 16.01-.2l480 192c10.6 4.2 16.7 15.6 13.2 26.7z"/></svg>');
     background-size: contain;
     background-repeat: no-repeat;
-    animation: fly 8s linear infinite;
+    animation: shipFloat 4s ease-in-out infinite;
+    z-index: 2;
 }
 
 .buttons {
@@ -110,12 +123,13 @@ body {
     gap: 15px;
     width: 100%;
     max-width: 300px;
+    z-index: 2;
 }
 
 .btn {
     padding: 15px 30px;
     border: none;
-    border-radius: 50px;
+    border-radius: 4px;
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
@@ -124,53 +138,45 @@ body {
     overflow: hidden;
     z-index: 1;
     text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .play-btn {
     background: linear-gradient(45deg, var(--primary), var(--secondary));
-    color: white;
-    box-shadow: 0 4px 20px rgba(110, 69, 226, 0.4);
+    color: var(--dark);
+    box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
+    border: 1px solid rgba(124, 77, 255, 0.3);
 }
 
 .about-btn, .back-btn, .menu-btn {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    color: var(--light);
+    border: 1px solid rgba(124, 77, 255, 0.3);
 }
 
 .restart-btn {
-    background: linear-gradient(45deg, #ff6b6b, #ffa3a3);
-    color: white;
-    box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4);
+    background: linear-gradient(45deg, #ff5252, #ff4081);
+    color: var(--dark);
+    box-shadow: 0 0 15px rgba(255, 82, 82, 0.5);
 }
 
 .btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(110, 69, 226, 0.6);
+    box-shadow: 0 5px 20px rgba(79, 195, 247, 0.7);
 }
 
 .btn:active {
     transform: translateY(1px);
 }
 
-.clouds {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path fill="%23ffffff10" d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path><path fill="%23ffffff10" d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path><path fill="%23ffffff10" d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path></svg>');
-    background-size: cover;
-    opacity: 0.3;
-}
-
-/* Экран игры */
 #gameCanvas {
     display: block;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, #0f0c29, #302b63);
+    background: radial-gradient(ellipse at center, #0b0a20 0%, #070616 100%);
 }
 
 .game-ui {
@@ -186,11 +192,13 @@ body {
     gap: 8px;
     font-size: 1.5rem;
     font-weight: 600;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(11, 10, 32, 0.7);
     backdrop-filter: blur(5px);
     padding: 8px 15px;
-    border-radius: 50px;
-    color: white;
+    border-radius: 4px;
+    color: var(--primary);
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    box-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
 }
 
 .score-icon {
@@ -198,22 +206,19 @@ body {
 }
 
 /* Анимации */
-@keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(5deg); }
+@keyframes starsMove {
+    from { background-position: 0 0; }
+    to { background-position: -200px -200px; }
 }
 
-@keyframes fly {
-    0% { transform: translateX(-50%) translateY(0) rotate(0deg); }
-    25% { transform: translateX(-50%) translateY(-15px) rotate(5deg); }
-    50% { transform: translateX(-50%) translateY(0) rotate(0deg); }
-    75% { transform: translateX(-50%) translateY(15px) rotate(-5deg); }
-    100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+@keyframes shipFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+    50% { transform: translateX(-50%) translateY(-15px) rotate(3deg); }
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+@keyframes enginePulse {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
 }
 
 /* Адаптив */
@@ -223,13 +228,11 @@ body {
     }
     
     .title span {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
     
-    .moon {
-        width: 70px;
+    .ship-animation {
+        width: 50px;
         height: 70px;
-        top: -30px;
-        right: -20px;
     }
 }
