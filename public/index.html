@@ -3,51 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moonlight Bird</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap">
+    <title>Space Odyssey</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
         <div class="main-menu menu-screen">
             <div class="title-container">
-                <h1 class="title">Moonlight<span>Bird</span></h1>
-                <div class="moon"></div>
-                <div class="bird-animation"></div>
+                <h1 class="title">SPACE<span>ODYSSEY</span></h1>
+                <div class="stars"></div>
+                <div class="ship-animation"></div>
             </div>
             <div class="buttons">
-                <button class="btn play-btn">Начать игру</button>
-                <button class="btn about-btn">Об игре</button>
+                <button class="btn play-btn">START MISSION</button>
+                <button class="btn about-btn">ABOUT</button>
             </div>
-            <div class="clouds"></div>
         </div>
 
         <div class="about-screen menu-screen hidden">
-            <h2>Об игре</h2>
+            <h2>MISSION BRIEFING</h2>
             <div class="about-content">
-                <p>Помогите птичке пролететь через фонарные столбы в лунную ночь.</p>
-                <p>Нажимайте на экран, чтобы взмахнуть крыльями!</p>
+                <p>Navigate your starship through asteroid pillars.</p>
+                <p>Tap screen to boost engines!</p>
             </div>
-            <button class="btn back-btn">Назад</button>
+            <button class="btn back-btn">BACK</button>
         </div>
 
         <canvas id="gameCanvas"></canvas>
 
         <div class="game-ui">
             <div class="score-display">
-                <span class="score-icon">🏆</span>
+                <span class="score-icon">🚀</span>
                 <span id="score">0</span>
             </div>
         </div>
 
         <div class="game-over-screen menu-screen hidden">
-            <h2>Игра окончена</h2>
+            <h2>MISSION FAILED</h2>
             <div class="final-score">
-                Ваш результат: <span id="finalScore">0</span>
+                SCORE: <span id="finalScore">0</span>
             </div>
             <div class="buttons">
-                <button class="btn restart-btn">Играть снова</button>
-                <button class="btn menu-btn">В меню</button>
+                <button class="btn restart-btn">RETRY</button>
+                <button class="btn menu-btn">MENU</button>
             </div>
         </div>
     </div>
