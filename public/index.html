@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Космический Полёт</title>
+    <title>Космический джойстик</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
         <div class="main-menu menu-screen">
-            <h1>КОСМИЧЕСКИЙ ПОЛЁТ</h1>
+            <h1>КОСМИЧЕСКИЙ ДЖОЙСТИК</h1>
             <button class="btn play-btn">СТАРТ</button>
         </div>
         
-        <canvas id="gameCanvas"></canvas>
+        <div class="game-area">
+            <canvas id="gameCanvas"></canvas>
+            <div class="joystick-container">
+                <div class="joystick"></div>
+            </div>
+        </div>
         
         <div class="game-ui">
             <div class="score-display">СЧЁТ: <span id="score">0</span></div>
-            <div class="controls">
-                <button class="control-btn up-btn">↑</button>
-                <button class="control-btn down-btn">↓</button>
-            </div>
+            <div class="speed-display">СКОРОСТЬ: <span id="speed">1x</span></div>
         </div>
         
         <div class="game-over-screen menu-screen hidden">
