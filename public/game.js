@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
             x: 100,
             y: canvas.height / 2,
             radius: 20,
-            velocity: 0,
-            gravity: 0.5,
-            jumpStrength: -12
+            velocity: -3,
+            gravity: 0.3,
+            jumpStrength: -8
         },
         obstacles: [],
         score: 0,
