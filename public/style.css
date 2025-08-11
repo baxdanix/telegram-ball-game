@@ -27,17 +27,17 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     color: white;
     z-index: 100;
     text-align: center;
 }
 
 .menu-screen h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin-bottom: 2rem;
     color: #4fc3f7;
-    text-shadow: 0 0 10px rgba(79, 195, 247, 0.7);
+    text-shadow: 0 0 15px rgba(79, 195, 247, 0.8);
 }
 
 .hidden {
@@ -58,27 +58,57 @@ body {
     color: white;
     font-size: 1.5rem;
     z-index: 10;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 5px 15px;
-    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+.controls {
+    position: absolute;
+    right: 20px;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.control-btn:active {
+    background: rgba(79, 195, 247, 0.7);
+    transform: scale(0.95);
 }
 
 .btn {
-    padding: 12px 30px;
-    margin: 10px;
+    padding: 12px 40px;
+    margin: 15px;
     background: linear-gradient(45deg, #4fc3f7, #7c4dff);
     color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
+    border-radius: 30px;
+    font-size: 1.2rem;
     cursor: pointer;
     transition: all 0.3s;
-    min-width: 200px;
+    min-width: 220px;
+    box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
 }
 
 .btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(79, 195, 247, 0.4);
+    box-shadow: 0 6px 20px rgba(79, 195, 247, 0.6);
 }
 
 .btn:active {
@@ -90,23 +120,30 @@ body {
 }
 
 .final-score {
-    margin: 20px 0;
-    font-size: 1.8rem;
+    margin: 25px 0;
+    font-size: 2rem;
     color: #4fc3f7;
 }
 
 /* Адаптив для мобильных */
 @media (max-width: 768px) {
     .menu-screen h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
     
     .btn {
-        padding: 10px 20px;
-        min-width: 160px;
+        padding: 10px 25px;
+        min-width: 180px;
+        font-size: 1rem;
     }
     
     .game-ui {
         font-size: 1.2rem;
+    }
+    
+    .control-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
     }
 }
