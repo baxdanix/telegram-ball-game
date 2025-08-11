@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Jumping Ball Game</title>
+    <title>Night Bird Flight</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="game.js" defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    </style>
 </head>
 <body>
     <div id="game-container">
+        <div id="menu">
+            <h1>Night Bird Flight</h1>
+            <div class="btn" id="startBtn">Start Game</div>
+            <div class="btn" id="aboutBtn">About</div>
+        </div>
+        <div id="about" class="hidden">
+            <h2>About the Game</h2>
+            <p>Guide the night bird through the city lights!</p>
+            <div class="btn" id="backBtn">Back</div>
+        </div>
         <canvas id="gameCanvas"></canvas>
-        <div id="score">Score: 0</div>
-        <div id="startScreen">Tap to Start</div>
-        <div id="gameOver">Game Over! Tap to restart</div>
+        <div id="score">0</div>
+        <div id="gameOver" class="hidden">
+            <h2>Game Over</h2>
+            <p>Your score: <span id="finalScore">0</span></p>
+            <div class="btn" id="restartBtn">Try Again</div>
+        </div>
     </div>
+    <script src="game.js"></script>
 </body>
 </html>
