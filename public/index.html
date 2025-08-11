@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Космическое Приключение</title>
+    <title>Космический Полёт</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
         <div class="main-menu menu-screen">
-            <h1>КОСМИЧЕСКОЕ ПРИКЛЮЧЕНИЕ</h1>
-            <button class="btn play-btn">НАЧАТЬ ИГРУ</button>
+            <h1>КОСМИЧЕСКИЙ ПОЛЁТ</h1>
+            <button class="btn play-btn">СТАРТ</button>
         </div>
         
         <canvas id="gameCanvas"></canvas>
         
         <div class="game-ui">
-            <div class="score-display">СЧЕТ: <span id="score">0</span></div>
+            <div class="score-display">СЧЁТ: <span id="score">0</span></div>
+            <div class="controls">
+                <button class="control-btn up-btn">↑</button>
+                <button class="control-btn down-btn">↓</button>
+            </div>
         </div>
         
         <div class="game-over-screen menu-screen hidden">
             <h2>ИГРА ОКОНЧЕНА</h2>
-            <div class="final-score">ВАШ СЧЕТ: <span id="finalScore">0</span></div>
-            <button class="btn restart-btn">ИГРАТЬ СНОВА</button>
+            <div class="final-score">ВАШ СЧЁТ: <span id="finalScore">0</span></div>
+            <button class="btn restart-btn">ЗАНОВО</button>
             <button class="btn menu-btn">МЕНЮ</button>
         </div>
     </div>
-
-    <!-- Предзагрузка изображений -->
-    <img id="preload-fon" src="fon.jpg" style="display:none">
-    <img id="preload-sam" src="sam.png" style="display:none">
 
     <script src="game.js"></script>
 </body>
