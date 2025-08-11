@@ -3,35 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Космический джойстик</title>
+    <title>Flappy Space</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
         <div class="main-menu menu-screen">
-            <h1>КОСМИЧЕСКИЙ ДЖОЙСТИК</h1>
+            <h1>FLAPPY SPACE</h1>
             <button class="btn play-btn">СТАРТ</button>
         </div>
         
-        <div class="game-area">
-            <canvas id="gameCanvas"></canvas>
-            <div class="joystick-container">
-                <div class="joystick"></div>
-            </div>
-        </div>
+        <canvas id="gameCanvas"></canvas>
         
         <div class="game-ui">
             <div class="score-display">СЧЁТ: <span id="score">0</span></div>
-            <div class="speed-display">СКОРОСТЬ: <span id="speed">1x</span></div>
         </div>
         
         <div class="game-over-screen menu-screen hidden">
             <h2>ИГРА ОКОНЧЕНА</h2>
-            <div class="final-score">ВАШ СЧЁТ: <span id="finalScore">0</span></div>
-            <button class="btn restart-btn">ЗАНОВО</button>
-            <button class="btn menu-btn">МЕНЮ</button>
+            <div class="final-score">СЧЁТ: <span id="finalScore">0</span></div>
+            <button class="btn restart-btn">ИГРАТЬ СНОВА</button>
         </div>
     </div>
+
+    <!-- Предзагрузка изображений -->
+    <img id="preload-player" src="san.png" style="display:none">
+    <img id="preload-pillar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 300'><rect width='100' height='300' fill='%234CAF50'/></svg>" style="display:none">
 
     <script src="game.js"></script>
 </body>
