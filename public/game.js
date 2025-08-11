@@ -8,10 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn = document.querySelector('.play-btn');
     const restartBtn = document.querySelector('.restart-btn');
 
-    // Загрузка изображения игрока
-    const playerImg = new Image();
-    playerImg.src = 'san.png';
-
     // Параметры игры
     const game = {
         player: {
@@ -22,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
             velocity: 0,
             gravity: 0.5,
             jumpForce: -10,
-            rotation: 0
+            rotation: 0,
+            color: '#FF5722' // Оранжевый цвет как запасной вариант
         },
         pillars: [],
         stars: [],
@@ -30,7 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOver: false,
         started: false,
         pillarTimer: 0,
-        animationId: null
+        animationId: null,
+        playerImg: null,
+        assetsLoaded: false
     };
 
     // Настройка canvas
@@ -41,6 +40,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+
+    // Загрузка изображения игрока
+    function loadAssets() {
+        game.playerImg = new Image();
+        game.playerImg.onload = () => {
+            game.assetsLoaded = true;
+            // Автоматически подстраиваем размер под изображение
+            game.player.width = game.playerImg.width * 0.15;
+            game.player.height = game.playerImg.height * 0.15;
+        };
+        game.playerImg.onerror = () => {
+            console.log('Изображение не загрузилось, используем цветной квадрат');
+            game.assetsLoaded = true;
+        };
+        game.playerImg.src = 'san.png';
+    }
+    loadAssets();
 
     // Создание звездного фона
     function createStars() {
@@ -64,17 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxHeight = canvas.height - gap - minHeight;
         const topHeight = Math.random() * (maxHeight - minHeight) + minHeight;
         
-        // Верхний столб
         game.pillars.push({
             x: canvas.width,
             y: 0,
             width: 80,
             height: topHeight,
             passed: false
-        });
-        
-        // Нижний столб
-        game.pillars.push({
+        }, {
             x: canvas.width,
             y: topHeight + gap,
             width: 80,
@@ -154,10 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
             game.pillars[i].x -= 3;
             
             // Проверка столкновений
-            if (game.player.x < game.pillars[i].x + game.pillars[i].width &&
-                game.player.x + game.player.width > game.pillars[i].x &&
-                game.player.y < game.pillars[i].y + game.pillars[i].height &&
-                game.player.y + game.player.height > game.pillars[i].y) {
+            if (checkCollision(game.player, game.pillars[i])) {
                 gameOver();
                 return;
             }
@@ -185,11 +194,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Проверка столкновений
+    function checkCollision(player, pillar) {
+        return player.x < pillar.x + pillar.width &&
+               player.x + player.width > pillar.x &&
+               player.y < pillar.y + pillar.height &&
+               player.y + player.height > pillar.y;
+    }
+
     // Окончание игры
     function gameOver() {
         game.gameOver = true;
         finalScoreElement.textContent = game.score;
         gameOverScreen.classList.remove('hidden');
+        cancelAnimationFrame(game.animationId);
     }
 
     // Отрисовка игры
@@ -219,9 +237,9 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         ctx.rotate(game.player.rotation * Math.PI / 180);
         
-        if (playerImg.complete) {
+        if (game.assetsLoaded && game.playerImg.complete) {
             ctx.drawImage(
-                playerImg, 
+                game.playerImg, 
                 -game.player.width / 2, 
                 -game.player.height / 2, 
                 game.player.width, 
@@ -229,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
             );
         } else {
             // Fallback если изображение не загрузилось
-            ctx.fillStyle = '#FF5722';
+            ctx.fillStyle = game.player.color;
             ctx.fillRect(
                 -game.player.width / 2, 
                 -game.player.height / 2, 
