@@ -5,9 +5,10 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     overflow: hidden;
-    background-color: #87CEEB;
+    touch-action: manipulation;
+    background-color: #000;
 }
 
 .game-container {
@@ -26,15 +27,15 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     color: white;
     z-index: 100;
 }
 
 .menu-screen h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-bottom: 2rem;
-    color: #FFEB3B;
+    color: #4fc3f7;
 }
 
 .hidden {
@@ -45,7 +46,7 @@ body {
     display: block;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+    background-color: #000;
 }
 
 .game-ui {
@@ -55,15 +56,14 @@ body {
     transform: translateX(-50%);
     color: white;
     font-size: 2rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     z-index: 10;
 }
 
 .btn {
     padding: 15px 40px;
-    margin: 10px;
-    background: #FF5722;
-    color: white;
+    margin: 15px;
+    background: #4fc3f7;
+    color: #000;
     border: none;
     border-radius: 5px;
     font-size: 1.2rem;
@@ -72,15 +72,15 @@ body {
 }
 
 .btn:hover {
-    background: #E64A19;
+    background: #3fb0e0;
 }
 
 .game-over-screen {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .final-score {
     margin: 20px 0;
-    font-size: 1.5rem;
-    color: #FFEB3B;
+    font-size: 1.8rem;
+    color: #4fc3f7;
 }
