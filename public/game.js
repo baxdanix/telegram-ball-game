@@ -23,40 +23,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Загрузка изображений
     const assets = {
-        bird: {
-            img: new Image(),
-            frames: [
-                'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%2388d3ce" d="M512 256c0-37.7-23.7-69.9-57.1-82.4 14.7-32.9 8.3-70.8-19.5-98.6-27.8-27.8-65.7-34.2-98.6-19.5C325.9 23.7 293.7 0 256 0s-69.9 23.7-82.4 57.1c-32.9-14.7-70.8-8.3-98.6 19.5-27.8 27.8-34.2 65.7-19.5 98.6C23.7 186.1 0 218.3 0 256s23.7 69.9 57.1 82.4c-14.7 32.9-8.3 70.8 19.5 98.6 27.8 27.8 65.7 34.2 98.6 19.5C186.1 488.3 218.3 512 256 512s69.9-23.7 82.4-57.1c32.9 14.7 70.8 8.3 98.6-19.5 27.8-27.8 34.2-65.7 19.5-98.6C488.3 325.9 512 293.7 512 256z"/></svg>',
-                'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%236e45e2" d="M512 256c0-37.7-23.7-69.9-57.1-82.4 14.7-32.9 8.3-70.8-19.5-98.6-27.8-27.8-65.7-34.2-98.6-19.5C325.9 23.7 293.7 0 256 0s-69.9 23.7-82.4 57.1c-32.9-14.7-70.8-8.3-98.6 19.5-27.8 27.8-34.2 65.7-19.5 98.6C23.7 186.1 0 218.3 0 256s23.7 69.9 57.1 82.4c-14.7 32.9-8.3 70.8 19.5 98.6 27.8 27.8 65.7 34.2 98.6 19.5C186.1 488.3 218.3 512 256 512s69.9-23.7 82.4-57.1c32.9 14.7 70.8 8.3 98.6-19.5 27.8-27.8 34.2-65.7 19.5-98.6C488.3 325.9 512 293.7 512 256z"/></svg>'
-            ],
-            currentFrame: 0,
-            frameCount: 0,
-            frameDelay: 5
-        },
-        lampPost: new Image(),
-        background: null
+        ship: new Image(),
+        asteroid: new Image(),
+        engineFire: new Image()
     };
 
-    assets.bird.img.src = assets.bird.frames[0];
-    assets.lampPost.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 300"><rect x="20" y="0" width="10" height="250" fill="%23555555"/><rect x="0" y="240" width="50" height="10" fill="%23555555"/><circle cx="25" cy="230" r="20" fill="%23FFD700"/></svg>';
+    assets.ship.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%234fc3f7" d="M511.6 36.86l-144 384c-4.19 11.2-16.01 17.7-27.2 13.5-5.47-2.05-9.6-6.33-11.2-11.68L304 288H192l-25.2 134.7c-1.6 5.3-5.8 9.6-11.2 11.7-11.2 4.2-23.0-2.3-27.2-13.5l-144-384c-3.95-10.53.21-22.45 10.19-27.01 5.06-2.3 10.86-2.4 16.01-.2l480 192c10.6 4.2 16.7 15.6 13.2 26.7z"/></svg>';
+    assets.asteroid.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 300"><path fill="%23795548" d="M50,0 Q60,20 50,40 Q30,60 50,80 Q70,100 50,120 Q30,140 50,160 Q70,180 50,200 Q30,220 50,240 Q70,260 50,280 Q30,300 50,300 L60,300 Q70,280 60,260 Q80,240 60,220 Q40,200 60,180 Q80,160 60,140 Q40,120 60,100 Q80,80 60,60 Q40,40 60,20 Q80,0 60,0 Z"/></svg>';
+    assets.engineFire.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><radialGradient id="fireGradient"><stop offset="0%" stop-color="%23ff9100"/><stop offset="100%" stop-color="%23ff5252"/></radialGradient><path fill="url(%23fireGradient)" d="M50,100 Q60,70 50,50 Q30,30 50,10 Q70,30 50,50 Q60,70 50,100 Z"/></svg>';
 
     // Параметры игры
     const game = {
-        bird: {
-            x: 100,
+        ship: {
+            x: 150,
             y: canvas.height / 2,
-            width: 40,
-            height: 40,
+            width: 50,
+            height: 70,
             velocity: 0,
-            gravity: 0.35,
-            jumpStrength: -8,
-            rotation: 0
+            gravity: 0.4,
+            boostStrength: -10,
+            rotation: 0,
+            engineFire: false,
+            engineTimer: 0
         },
-        obstacles: [],
+        pillars: [],
         score: 0,
         gameOver: false,
         started: false,
-        obstacleTimer: 0,
+        pillarTimer: 0,
         animationFrame: null,
         lastTime: 0,
         stars: []
@@ -65,13 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Создание звёзд для фона
     function createStars() {
         game.stars = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 150; i++) {
             game.stars.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                size: Math.random() * 1.5 + 0.5,
+                size: Math.random() * 2 + 0.5,
                 opacity: Math.random() * 0.8 + 0.2,
-                speed: Math.random() * 0.2 + 0.1
+                speed: Math.random() * 2 + 1
             });
         }
     }
@@ -99,10 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (game.gameOver) {
             restartGame();
         } else {
-            game.bird.velocity = game.bird.jumpStrength;
-            // Анимация взмаха крыльев
-            assets.bird.frameCount = 0;
-            assets.bird.currentFrame = 1;
+            game.ship.velocity = game.ship.boostStrength;
+            game.ship.engineFire = true;
+            game.ship.engineTimer = 10;
         }
     }
 
@@ -133,79 +126,93 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function resetGame() {
-        game.obstacles = [];
-        game.bird.y = canvas.height / 2;
-        game.bird.velocity = 0;
-        game.bird.rotation = 0;
+        game.pillars = [];
+        game.ship.y = canvas.height / 2;
+        game.ship.velocity = 0;
+        game.ship.rotation = 0;
         game.score = 0;
         scoreElement.textContent = game.score;
-        game.obstacleTimer = 0;
+        game.pillarTimer = 0;
     }
 
-    function createObstacle() {
-        const gap = Math.min(canvas.height * 0.35, 220);
+    function createPillarPair() {
+        const gap = Math.min(canvas.height * 0.4, 250);
         const minHeight = 100;
         const maxHeight = canvas.height - gap - minHeight;
         const topHeight = Math.random() * (maxHeight - minHeight) + minHeight;
         
-        game.obstacles.push({
+        // Верхний столб
+        game.pillars.push({
             x: canvas.width,
+            y: 0,
             width: 60,
-            topHeight,
-            gap,
-            passed: false,
-            lightOn: Math.random() > 0.3
+            height: topHeight,
+            type: 'top',
+            passed: false
+        });
+        
+        // Нижний столб
+        game.pillars.push({
+            x: canvas.width,
+            y: topHeight + gap,
+            width: 60,
+            height: canvas.height - (topHeight + gap),
+            type: 'bottom',
+            passed: false
         });
     }
 
     function update(deltaTime) {
         if (!game.started || game.gameOver) return;
         
-        // Обновление птицы
-        game.bird.velocity += game.bird.gravity;
-        game.bird.y += game.bird.velocity;
-        game.bird.rotation = Math.atan2(game.bird.velocity, 10) * 0.5;
+        // Обновление корабля
+        game.ship.velocity += game.ship.gravity;
+        game.ship.y += game.ship.velocity;
+        game.ship.rotation = Math.atan2(game.ship.velocity, 20) * 0.5;
         
-        // Анимация крыльев
-        assets.bird.frameCount++;
-        if (assets.bird.frameCount >= assets.bird.frameDelay) {
-            assets.bird.frameCount = 0;
-            assets.bird.currentFrame = assets.bird.currentFrame === 0 ? 1 : 0;
-            assets.bird.img.src = assets.bird.frames[assets.bird.currentFrame];
+        // Анимация двигателя
+        if (game.ship.engineFire) {
+            game.ship.engineTimer--;
+            if (game.ship.engineTimer <= 0) {
+                game.ship.engineFire = false;
+            }
         }
         
         // Проверка границ
-        if (game.bird.y + game.bird.height > canvas.height || game.bird.y < 0) {
+        if (game.ship.y + game.ship.height > canvas.height || game.ship.y < 0) {
             gameOver();
         }
         
-        // Генерация препятствий
-        game.obstacleTimer++;
-        if (game.obstacleTimer > 150) {
-            createObstacle();
-            game.obstacleTimer = 0;
+        // Генерация столбов
+        game.pillarTimer++;
+        if (game.pillarTimer > 120) {
+            createPillarPair();
+            game.pillarTimer = 0;
         }
         
-        // Обновление препятствий
-        for (let i = game.obstacles.length - 1; i >= 0; i--) {
-            game.obstacles[i].x -= 3;
+        // Обновление столбов
+        for (let i = game.pillars.length - 1; i >= 0; i--) {
+            game.pillars[i].x -= 4; // Фиксированная скорость
             
             // Проверка столкновений
-            if (checkCollision(game.bird, game.obstacles[i])) {
+            if (checkCollision(game.ship, game.pillars[i])) {
                 gameOver();
             }
             
             // Удаление за пределами экрана
-            if (game.obstacles[i].x + game.obstacles[i].width < 0) {
-                game.obstacles.splice(i, 1);
+            if (game.pillars[i].x + game.pillars[i].width < 0) {
+                game.pillars.splice(i, 1);
             }
             
             // Подсчет очков
-            if (!game.obstacles[i].passed && 
-                game.obstacles[i].x + game.obstacles[i].width < game.bird.x) {
-                game.obstacles[i].passed = true;
-                game.score++;
-                scoreElement.textContent = game.score;
+            if (!game.pillars[i].passed && 
+                game.pillars[i].x + game.pillars[i].width < game.ship.x) {
+                game.pillars[i].passed = true;
+                // Считаем только верхние столбы
+                if (game.pillars[i].type === 'top') {
+                    game.score++;
+                    scoreElement.textContent = game.score;
+                }
             }
         }
         
@@ -219,21 +226,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function checkCollision(bird, obstacle) {
-        const birdRight = bird.x + bird.width * 0.7;
-        const birdLeft = bird.x + bird.width * 0.3;
-        const birdBottom = bird.y + bird.height * 0.7;
-        const birdTop = bird.y + bird.height * 0.3;
-        const obstacleRight = obstacle.x + obstacle.width;
+    function checkCollision(ship, pillar) {
+        const shipRight = ship.x + ship.width * 0.8;
+        const shipLeft = ship.x + ship.width * 0.2;
+        const shipBottom = ship.y + ship.height * 0.8;
+        const shipTop = ship.y + ship.height * 0.2;
+        const pillarRight = pillar.x + pillar.width;
         
         // Проверка по горизонтали
-        if (birdRight < obstacle.x || birdLeft > obstacleRight) {
+        if (shipRight < pillar.x || shipLeft > pillarRight) {
             return false;
         }
         
         // Проверка по вертикали
-        return birdTop < obstacle.topHeight || 
-               birdBottom > obstacle.topHeight + obstacle.gap;
+        return shipTop < pillar.y + pillar.height && 
+               shipBottom > pillar.y;
     }
 
     function gameOver() {
@@ -245,22 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function drawBackground() {
-        // Градиентное небо
-        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, '#0f0c29');
-        gradient.addColorStop(1, '#302b63');
-        ctx.fillStyle = gradient;
+        // Космический фон
+        ctx.fillStyle = '#0b0a20';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Луна
-        ctx.beginPath();
-        ctx.arc(canvas.width - 50, 50, 30, 0, Math.PI * 2);
-        ctx.fillStyle = '#f5f3ce';
-        ctx.fill();
-        ctx.shadowColor = 'rgba(245, 243, 206, 0.4)';
-        ctx.shadowBlur = 30;
-        ctx.fill();
-        ctx.shadowBlur = 0;
         
         // Звёзды
         game.stars.forEach(star => {
@@ -270,69 +264,88 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fill();
         });
         
-        // Земля
-        ctx.fillStyle = '#1a1a2e';
-        ctx.fillRect(0, canvas.height - 30, canvas.width, 30);
+        // Туманности
+        const nebula1 = ctx.createRadialGradient(
+            canvas.width * 0.3, canvas.height * 0.2, 0,
+            canvas.width * 0.3, canvas.height * 0.2, 200
+        );
+        nebula1.addColorStop(0, 'rgba(124, 77, 255, 0.1)');
+        nebula1.addColorStop(1, 'rgba(124, 77, 255, 0)');
+        ctx.fillStyle = nebula1;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    function drawBird() {
+    function drawShip() {
         ctx.save();
         ctx.translate(
-            game.bird.x + game.bird.width / 2, 
-            game.bird.y + game.bird.height / 2
+            game.ship.x + game.ship.width / 2, 
+            game.ship.y + game.ship.height / 2
         );
-        ctx.rotate(game.bird.rotation);
+        ctx.rotate(game.ship.rotation);
+        
+        // Отрисовка корабля
         ctx.drawImage(
-            assets.bird.img, 
-            -game.bird.width / 2, 
-            -game.bird.height / 2, 
-            game.bird.width, 
-            game.bird.height
+            assets.ship, 
+            -game.ship.width / 2, 
+            -game.ship.height / 2, 
+            game.ship.width, 
+            game.ship.height
         );
+        
+        // Огонь двигателя
+        if (game.ship.engineFire) {
+            ctx.save();
+            ctx.translate(-game.ship.width * 0.3, game.ship.height * 0.4);
+            ctx.scale(0.8, 1.2);
+            ctx.globalAlpha = 0.7;
+            ctx.drawImage(
+                assets.engineFire, 
+                -20, 
+                0, 
+                40, 
+                40
+            );
+            ctx.restore();
+        }
+        
         ctx.restore();
     }
 
-    function drawObstacles() {
-        game.obstacles.forEach(obstacle => {
-            // Верхний фонарный столб
+    function drawPillars() {
+        game.pillars.forEach(pillar => {
             ctx.save();
-            ctx.translate(obstacle.x + 30, obstacle.topHeight - 50);
-            ctx.drawImage(assets.lampPost, 0, 0, 60, 300);
-            ctx.restore();
             
-            // Нижний фонарный столб (перевёрнутый)
-            ctx.save();
-            ctx.translate(obstacle.x + 30, obstacle.topHeight + obstacle.gap);
-            ctx.scale(1, -1);
-            ctx.drawImage(assets.lampPost, 0, 0, 60, 300);
-            ctx.restore();
+            // Столбы
+            ctx.drawImage(
+                assets.asteroid, 
+                pillar.x, 
+                pillar.y, 
+                pillar.width, 
+                pillar.height
+            );
             
-            // Свет от фонарей
-            if (obstacle.lightOn) {
-                // Верхний свет
-                const topLightGradient = ctx.createRadialGradient(
-                    obstacle.x + 30, obstacle.topHeight - 20, 5,
-                    obstacle.x + 30, obstacle.topHeight - 20, 50
+            // Свечение для верхних столбов
+            if (pillar.type === 'top') {
+                const glow = ctx.createRadialGradient(
+                    pillar.x + pillar.width / 2, 
+                    pillar.y + pillar.height, 
+                    0,
+                    pillar.x + pillar.width / 2, 
+                    pillar.y + pillar.height, 
+                    50
                 );
-                topLightGradient.addColorStop(0, 'rgba(255, 215, 0, 0.7)');
-                topLightGradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
-                ctx.fillStyle = topLightGradient;
-                ctx.beginPath();
-                ctx.arc(obstacle.x + 30, obstacle.topHeight - 20, 50, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Нижний свет
-                const bottomLightGradient = ctx.createRadialGradient(
-                    obstacle.x + 30, obstacle.topHeight + obstacle.gap + 20, 5,
-                    obstacle.x + 30, obstacle.topHeight + obstacle.gap + 20, 50
+                glow.addColorStop(0, 'rgba(121, 85, 72, 0.7)');
+                glow.addColorStop(1, 'rgba(121, 85, 72, 0)');
+                ctx.fillStyle = glow;
+                ctx.fillRect(
+                    pillar.x - 20, 
+                    pillar.y + pillar.height - 30, 
+                    pillar.width + 40, 
+                    50
                 );
-                bottomLightGradient.addColorStop(0, 'rgba(255, 215, 0, 0.7)');
-                bottomLightGradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
-                ctx.fillStyle = bottomLightGradient;
-                ctx.beginPath();
-                ctx.arc(obstacle.x + 30, obstacle.topHeight + obstacle.gap + 20, 50, 0, Math.PI * 2);
-                ctx.fill();
             }
+            
+            ctx.restore();
         });
     }
 
@@ -342,8 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Отрисовка элементов
         drawBackground();
-        drawObstacles();
-        drawBird();
+        drawPillars();
+        drawShip();
     }
 
     function gameLoop(timestamp) {
