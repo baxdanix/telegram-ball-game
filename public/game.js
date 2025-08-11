@@ -8,12 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn = document.querySelector('.play-btn');
     const restartBtn = document.querySelector('.restart-btn');
 
-    // Загружаем изображения
+    // Загрузка изображения игрока
     const playerImg = new Image();
     playerImg.src = 'san.png';
-    
-    const pillarImg = new Image();
-    pillarImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 300"><rect width="100" height="300" fill="%234CAF50"/></svg>';
 
     // Параметры игры
     const game = {
@@ -24,9 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 50,
             velocity: 0,
             gravity: 0.5,
-            jumpForce: -10
+            jumpForce: -10,
+            rotation: 0
         },
         pillars: [],
+        stars: [],
         score: 0,
         gameOver: false,
         started: false,
@@ -36,37 +35,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Настройка canvas
     function resizeCanvas() {
-        canvas.width = 400;
-        canvas.height = 600;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        game.player.y = canvas.height / 2;
     }
     resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-    // Создаем столбы
-    function createPillar() {
-        const gap = 150;
-        const topHeight = 100 + Math.random() * 200;
+    // Создание звездного фона
+    function createStars() {
+        game.stars = [];
+        for (let i = 0; i < 200; i++) {
+            game.stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                speed: Math.random() * 0.5 + 0.5,
+                alpha: Math.random() * 0.5 + 0.5
+            });
+        }
+    }
+    createStars();
+
+    // Создание столбов
+    function createPillarPair() {
+        const gap = 200;
+        const minHeight = 100;
+        const maxHeight = canvas.height - gap - minHeight;
+        const topHeight = Math.random() * (maxHeight - minHeight) + minHeight;
         
+        // Верхний столб
         game.pillars.push({
             x: canvas.width,
             y: 0,
-            width: 60,
+            width: 80,
             height: topHeight,
             passed: false
-        }, {
+        });
+        
+        // Нижний столб
+        game.pillars.push({
             x: canvas.width,
             y: topHeight + gap,
-            width: 60,
-            height: canvas.height - topHeight - gap,
+            width: 80,
+            height: canvas.height - (topHeight + gap),
             passed: false
         });
     }
 
     // Обработка кликов
-    function handleClick() {
+    function handleClick(e) {
+        e.preventDefault();
         if (!game.started) {
             startGame();
         } else if (!game.gameOver) {
             game.player.velocity = game.player.jumpForce;
+            game.player.rotation = -25;
         }
     }
 
@@ -82,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameLoop();
     }
 
-    // Перезапуск
+    // Перезапуск игры
     function restartGame() {
         gameOverScreen.classList.add('hidden');
         resetGame();
@@ -95,19 +119,22 @@ document.addEventListener('DOMContentLoaded', () => {
         game.pillars = [];
         game.player.y = canvas.height / 2;
         game.player.velocity = 0;
+        game.player.rotation = 0;
         game.score = 0;
         game.pillarTimer = 0;
         game.gameOver = false;
         scoreElement.textContent = '0';
+        createStars();
     }
 
-    // Обновление состояния
+    // Обновление игры
     function update() {
         if (!game.started || game.gameOver) return;
         
-        // Движение игрока
+        // Физика игрока
         game.player.velocity += game.player.gravity;
         game.player.y += game.player.velocity;
+        game.player.rotation = Math.min(Math.max(game.player.rotation + game.player.velocity * 0.5, -25), 25);
         
         // Проверка границ
         if (game.player.y < 0 || game.player.y + game.player.height > canvas.height) {
@@ -117,8 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Генерация столбов
         game.pillarTimer++;
-        if (game.pillarTimer > 100) {
-            createPillar();
+        if (game.pillarTimer > 120) {
+            createPillarPair();
             game.pillarTimer = 0;
         }
         
@@ -147,6 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 game.pillars.splice(i, 1);
             }
         }
+        
+        // Обновление звезд
+        game.stars.forEach(star => {
+            star.x -= star.speed;
+            if (star.x < -10) {
+                star.x = canvas.width + 10;
+                star.y = Math.random() * canvas.height;
+            }
+        });
     }
 
     // Окончание игры
@@ -156,14 +192,18 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOverScreen.classList.remove('hidden');
     }
 
-    // Отрисовка
+    // Отрисовка игры
     function draw() {
         // Очистка
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Фон
-        ctx.fillStyle = '#87CEEB';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Звездный фон
+        ctx.fillStyle = 'white';
+        game.stars.forEach(star => {
+            ctx.globalAlpha = star.alpha;
+            ctx.fillRect(star.x, star.y, star.size, star.size);
+        });
+        ctx.globalAlpha = 1;
         
         // Столбы
         ctx.fillStyle = '#4CAF50';
@@ -172,12 +212,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         // Игрок
+        ctx.save();
+        ctx.translate(
+            game.player.x + game.player.width / 2, 
+            game.player.y + game.player.height / 2
+        );
+        ctx.rotate(game.player.rotation * Math.PI / 180);
+        
         if (playerImg.complete) {
-            ctx.drawImage(playerImg, game.player.x, game.player.y, game.player.width, game.player.height);
+            ctx.drawImage(
+                playerImg, 
+                -game.player.width / 2, 
+                -game.player.height / 2, 
+                game.player.width, 
+                game.player.height
+            );
         } else {
+            // Fallback если изображение не загрузилось
             ctx.fillStyle = '#FF5722';
-            ctx.fillRect(game.player.x, game.player.y, game.player.width, game.player.height);
+            ctx.fillRect(
+                -game.player.width / 2, 
+                -game.player.height / 2, 
+                game.player.width, 
+                game.player.height
+            );
         }
+        
+        ctx.restore();
     }
 
     // Игровой цикл
